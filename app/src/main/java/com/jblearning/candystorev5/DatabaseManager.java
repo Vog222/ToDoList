@@ -4,16 +4,16 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
 import java.util.ArrayList;
+import java.util.Date;
 
 public class DatabaseManager extends SQLiteOpenHelper {
-  private static final String DATABASE_NAME = "candyDB";
+  private static final String DATABASE_NAME = "todoDB";
   private static final int DATABASE_VERSION = 1;
-  private static final String TABLE_CANDY = "candy";
+  private static final String TABLE_LIST = "item";
   private static final String ID = "id";
   private static final String NAME = "name";
-  private static final String PRICE = "price";
+  private static final String DATE = "date";
 	
   public DatabaseManager( Context context ) {
     super( context, DATABASE_NAME, null, DATABASE_VERSION );
@@ -21,9 +21,9 @@ public class DatabaseManager extends SQLiteOpenHelper {
  
   public void onCreate( SQLiteDatabase db ) {
     // build sql create statement
-    String sqlCreate = "create table " + TABLE_CANDY + "( " + ID;
+    String sqlCreate = "create table " + TABLE_LIST + "( " + ID;
     sqlCreate += " integer primary key autoincrement, " + NAME;
-    sqlCreate += " text, " + PRICE + " real )" ;
+    sqlCreate += " text, " + DATE + " real )" ;
     
     db.execSQL( sqlCreate );
   }
@@ -31,16 +31,16 @@ public class DatabaseManager extends SQLiteOpenHelper {
   public void onUpgrade( SQLiteDatabase db,
                          int oldVersion, int newVersion ) {
     // Drop old table if it exists
-    db.execSQL( "drop table if exists " + TABLE_CANDY );
+    db.execSQL( "drop table if exists " + TABLE_LIST);
     // Re-create tables
     onCreate( db );
   }
     
-  public void insert( Candy candy ) {
+  public void insert( Item item ) {
     SQLiteDatabase db = this.getWritableDatabase( );
-    String sqlInsert = "insert into " + TABLE_CANDY;
-    sqlInsert += " values( null, '" + candy.getName( );
-    sqlInsert += "', '" + candy.getPrice( ) + "' )";
+    String sqlInsert = "insert into " + TABLE_LIST;
+    sqlInsert += " values( null, '" + item.getName( );
+    sqlInsert += "', '" + item.getDate( ) + "' )";
  
     db.execSQL( sqlInsert );
     db.close( );
@@ -48,53 +48,53 @@ public class DatabaseManager extends SQLiteOpenHelper {
    
   public void deleteById( int id ) {
     SQLiteDatabase db = this.getWritableDatabase( );
-    String sqlDelete = "delete from " + TABLE_CANDY;
+    String sqlDelete = "delete from " + TABLE_LIST;
     sqlDelete += " where " + ID + " = " + id;
     
     db.execSQL( sqlDelete );
     db.close( );
   }
 
-  public void updateById( int id, String name, double price ) {
+  public void updateById(int id, String name, Date date) {
     SQLiteDatabase db = this.getWritableDatabase();
  
-    String sqlUpdate = "update " + TABLE_CANDY;
+    String sqlUpdate = "update " + TABLE_LIST;
     sqlUpdate += " set " + NAME + " = '" + name + "', ";
-    sqlUpdate += PRICE + " = '" + price + "'";
+    sqlUpdate += DATE + " = '" + date + "'";
     sqlUpdate += " where " + ID + " = " + id;
 
     db.execSQL( sqlUpdate );
     db.close( );
   }
 
-  public ArrayList<Candy> selectAll( ) {
-    String sqlQuery = "select * from " + TABLE_CANDY;
+  public ArrayList<Item> selectAll( ) {
+    String sqlQuery = "select * from " + TABLE_LIST;
  
     SQLiteDatabase db = this.getWritableDatabase( );
     Cursor cursor = db.rawQuery( sqlQuery, null );
     
-    ArrayList<Candy> candies = new ArrayList<Candy>( );
+    ArrayList<Item> items = new ArrayList<Item>( );
     while( cursor.moveToNext( ) ) {
-      Candy currentCandy
-          = new Candy( Integer.parseInt( cursor.getString( 0 ) ),
-        		        cursor.getString( 1 ), cursor.getDouble( 2 ) );
-      candies.add( currentCandy );
+      Item currentItem
+          = new Item( Integer.parseInt( cursor.getString( 0 ) ),
+        		        cursor.getString( 1 ), cursor.( 2 ) );
+      items.add( currentItem );
     }
     db.close( );
-    return candies;
+    return items;
   }
     
-  public Candy selectById( int id ) {
-    String sqlQuery = "select * from " + TABLE_CANDY;
+  public Item selectById(int id ) {
+    String sqlQuery = "select * from " + TABLE_LIST;
     sqlQuery += " where " + ID + " = " + id;
     
     SQLiteDatabase db = this.getWritableDatabase( );
     Cursor cursor = db.rawQuery( sqlQuery, null );
  
-    Candy candy = null;
+    Item items = null;
     if( cursor.moveToFirst( ) )
-      candy = new Candy( Integer.parseInt( cursor.getString( 0 ) ),
+      items = new Item( Integer.parseInt( cursor.getString( 0 ) ),
 		              cursor.getString( 1 ), cursor.getDouble( 2 ) );
-    return candy;
+    return items;
   }
 }

@@ -27,7 +27,7 @@ public class UpdateActivity extends AppCompatActivity {
 
   // Build a View dynamically with all the candies
   public void updateView( ) {
-    ArrayList<Candy> candies = dbManager.selectAll( );
+    ArrayList<Item> candies = dbManager.selectAll( );
     if( candies.size( ) > 0 ) {
       // create ScrollView and GridLayout
       ScrollView scrollView = new ScrollView( this );
@@ -48,7 +48,7 @@ public class UpdateActivity extends AppCompatActivity {
 
       int i = 0;
 
-      for ( Candy candy : candies ) {
+      for ( Item candy : candies ) {
         // create the TextView for the candy's id
         ids[i] = new TextView( this );
         ids[i].setGravity( Gravity.CENTER );
@@ -102,7 +102,7 @@ public class UpdateActivity extends AppCompatActivity {
       try {
         double price = Double.parseDouble( priceString );
         dbManager.updateById( candyId, name, price );
-        Toast.makeText( UpdateActivity.this, "Candy updated",
+        Toast.makeText( UpdateActivity.this, "Item updated",
           Toast.LENGTH_SHORT ).show( );
 
         // update screen

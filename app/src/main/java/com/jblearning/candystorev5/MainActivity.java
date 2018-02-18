@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
   }
 
   public void updateView( ) {
-    ArrayList<Candy> candies = dbManager.selectAll( );
+    ArrayList<Item> candies = dbManager.selectAll( );
     if( candies.size( ) > 0 ) {
       // remove subviews inside scrollView if necessary
       scrollView.removeAllViewsInLayout( );
@@ -53,14 +53,14 @@ public class MainActivity extends AppCompatActivity {
       grid.setColumnCount( 2 );
 
       // create array of buttons, 2 per row
-      CandyButton [] buttons = new CandyButton[candies.size( )];
+      ItemButton[] buttons = new ItemButton[candies.size( )];
       ButtonHandler bh = new ButtonHandler( );
 
       // fill the grid
       int i = 0;
-      for ( Candy candy : candies ) {
+      for ( Item candy : candies ) {
         // create the button
-        buttons[i] = new CandyButton( this, candy );
+        buttons[i] = new ItemButton( this, candy );
         buttons[i].setText( candy.getName( )
             + "\n" + candy.getPrice( ) );
 
@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
   private class ButtonHandler implements View.OnClickListener {
     public void onClick( View v ) {
       // retrieve price of the candy and add it to total
-      total += ( ( CandyButton ) v ).getPrice( );
+      total += ( (ItemButton) v ).getPrice( );
       String pay =
         NumberFormat.getCurrencyInstance( ).format( total );
       Toast.makeText( MainActivity.this, pay,
